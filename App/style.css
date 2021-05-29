@@ -8,6 +8,11 @@
     background: #1e272e;
     min-height: 90vh;
     position: relative;
+    padding: 20px;
+    display: flex;
+    grid-gap: 10px;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 .header {
@@ -128,19 +133,40 @@
     opacity: 0.5;
     border-radius: 11%;
 }
-.modal-filter:hover{
-    opacity:1 ;
+
+.modal-filter:hover {
+    opacity: 1 ;
 }
 
-/* .modal-filter.blue{
-
+.tickets {
+    background: white;
+    height: 200px;
+    width: 400px;
 }
-.modal-filter.yellow{
 
+.ticket-colour {
+    /* background: aqua; */
+    height: 5%;
+    width: 100%;
 }
-.modal-filter.black{
 
+.ticket-content {
+    background: white;
+    height: 95%;
+    width: 100%;
 }
-.modal-filter.green{
-
-} */
+.h1{
+    margin : 50px
+}
+.ticketID{
+height :15% ;
+width : 100% ; 
+font-weight: bold;
+}
+.ticketBody{
+    height : 85%;
+    width : 100%;
+    margin-top: 10px;
+    text-align: center;
+    font-size: xx-large;
+}

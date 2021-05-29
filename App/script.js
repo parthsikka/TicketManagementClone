@@ -52,9 +52,15 @@ modalOpen.addEventListener("click", function(e){
     let modalText = document.querySelector(".modal-text") ;
     //Empty Modal Text on KeyPress  : 
     modalText.addEventListener("keypress", function(e){
-    if(modalText.getAttribute("data-typed") == "true"){
+        
+        // to append the ticket if Enter is Pressed : 
+        if(e.key == "Enter" && e.target.getAttribute("data-typed")=="true"){
+           AppendTicket(modalText.innerText) ;
+        }
+        if(modalText.getAttribute("data-typed") == "true"){
         return ; 
     }
+   
     e.target.innerText = "" ;
     modalText.setAttribute("data-typed", "true") ;
      })
@@ -74,13 +80,29 @@ modalOpen.addEventListener("click", function(e){
 })
 
 // CLose-Modal WorkFlow : 
-modalClose.addEventListener("click", function(e){
+
+modalClose.addEventListener("click",CloseModal) ;
+function CloseModal(e){
     if(document.querySelector(".modal")){
         document.querySelector(".modal").remove() ;
     }
-})
+}
 
-
-
-
-
+function AppendTicket(ticketText){
+    console.log(ticketText.length) ;
+    if(!ticketText.length){
+        return ;
+    }
+    let ticketDiv = document.createElement("div") ;
+    ticketDiv.classList.add("tickets") ;
+    ticketDiv.innerHTML = `<div class="ticket-colour"></div>
+    <div class="ticket-content">
+        <div class="ticketID">Ticket-ID</div>
+        <div class="ticketBody"></div>                
+    </div>`
+    ticketDiv.querySelector(".ticketBody").innerText = ticketText ; 
+    ticketArea.append(ticketDiv) ;
+    ticketDiv.querySelector(".ticket-colour").style.background = colorCodes[activeModalFilter] ;
+    activeModalFilter = "black" ;
+    CloseModal() ;
+}
