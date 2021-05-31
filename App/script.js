@@ -1,36 +1,27 @@
-let colorCodes ={
-    blue : "#4834d4", 
-    yellow: "#ffbe76", 
-    black : "#535c68", 
-    green: "#6ab04c"
-}
-let allFilters = document.querySelectorAll(".filter") ;
-let ticketArea = document.querySelector(".ticketContainer") ;
-let modalOpen = document.querySelector(".add-modal");
-let modalClose = document.querySelector(".close-modal");
-let activeModalFilter = "black"
+
 
 
 for(let a=0 ; a<allFilters.length ; a++){
     allFilters[a].addEventListener("click", function(e){
         let clickClass = e.target.classList[1] ;
-        console.log(clickClass); 
+        
         if(e.target.classList.contains("active-filter")){
             e.target.classList.remove("active-filter") ;
-            ticketArea.style.background = "#1e272e" ;
+            ticketArea.innerHTML = "" ;
+            let ticks = JSON.parse(localStorage.getItem("allTickets")); 
+            for(let i=0 ; i<ticks.length ; i++){
+                appendTicket(ticks[i].ticketId, ticks[i].ticketText, ticks[i].ticketFilter) ;
+            }
             return ;
-
         }
         let select = document.querySelector(".active-filter") ; 
         if(select){
             document.querySelector(".active-filter").classList.remove("active-filter")  ;
             
         }
-           
-        
-        
+         
         e.target.classList.add("active-filter") ; // this is the code to turn on the active filter!
-        ticketArea.style.background = colorCodes[clickClass] ;
+        sortTickets(clickClass) ; 
         
     })
 }
@@ -89,20 +80,43 @@ function CloseModal(e){
 }
 
 function AppendTicket(ticketText){
-    console.log(ticketText.length) ;
+   
     if(!ticketText.length){
         return ;
     }
     let ticketDiv = document.createElement("div") ;
     ticketDiv.classList.add("tickets") ;
-    ticketDiv.innerHTML = `<div class="ticket-colour"></div>
+    let ticketId = uid() ;
+    ticketDiv.innerHTML = `<div id=${ticketId} class="ticket-colour"></div>
     <div class="ticket-content">
-        <div class="ticketID">Ticket-ID</div>
+        <div class="ticketID">${ticketId}</div>
         <div class="ticketBody"></div>                
     </div>`
     ticketDiv.querySelector(".ticketBody").innerText = ticketText ; 
     ticketArea.append(ticketDiv) ;
     ticketDiv.querySelector(".ticket-colour").style.background = colorCodes[activeModalFilter] ;
+
+    let ticketObject = {
+        ticketId : ticketId, 
+        ticketText : ticketText,
+        ticketFilter : activeModalFilter
+    }
+
+    let allData = JSON.parse(localStorage.getItem("allTickets")) ;
+    allData.push(ticketObject) ;
+    localStorage.setItem("allTickets", JSON.stringify(allData)) ;
     activeModalFilter = "black" ;
     CloseModal() ;
+}
+
+
+function sortTickets(filterSelected){
+    let allTickets = JSON.parse(localStorage.getItem("allTickets")) ;
+    let filteredTickets = allTickets.filter( currentTicket =>{
+        return currentTicket.ticketFilter == filterSelected ;
+    });
+    ticketArea.innerHTML = "" ;
+    for(let a=0 ; a<filteredTickets.length ; a++){
+        appendTicket(filteredTickets[a].ticketId, filteredTickets[a].ticketText, filteredTickets[a].ticketFilter) ;
+    }
 }
